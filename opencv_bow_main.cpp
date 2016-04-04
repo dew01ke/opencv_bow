@@ -126,6 +126,7 @@ int main() {
 	Mat trainData(0, dictionary_size, CV_32FC1);
 	Mat trainLabels(0, 1, CV_32S);
 
+	/* Составление словаря */
 	clock_t tStart = clock();
 	std::cout << "Creating dictionary..." << endl;
 	extractTrainingVocabulary(path(TRAIN_DATA_DIR));
@@ -139,6 +140,7 @@ int main() {
 	time_dictionary_build = (double)(clock() - tStart) / CLOCKS_PER_SEC;
 	printf("Dictionary build time: %.2fs\n", time_dictionary_build);
 
+	/* Классификация */
 	Ptr<SVM> svm = SVM::create();
 	svm->setKernel(SVM::CHI2);
 	svm->setType(SVM::C_SVC);
@@ -147,6 +149,7 @@ int main() {
 	std::cout << "Training classifier.... using SVM" << endl;
 	svm->train(trainData, ROW_SAMPLE, trainLabels);
 
+	/* Обработка тестовых данных */
 	tStart = clock();
 	Mat evalData(0, dictionary_size, CV_32FC1);
 	Mat realLabels(0, 1, CV_32FC1);
